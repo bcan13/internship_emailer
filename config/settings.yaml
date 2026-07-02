@@ -21,7 +21,7 @@ max_jobs_per_source: 0
 
 # Email digest.
 email:
-  enabled: true
+  enabled: false
   subject_prefix: "[Intern Alert]"
   # group order in the digest
   category_order: [swe, quant, consulting, other]
@@ -30,19 +30,27 @@ email:
   # the top. Edit freely (e.g. add nvidia, microsoft).
   faang_companies: [meta, facebook, amazon, apple, netflix, google, alphabet]
 
-# SMS nudge (OFF — email-only setup). To enable later: set enabled: true,
+# Discord digest.
+discord:
+  enabled: true
+  subject_prefix: "[Job Alert]"
+  category_order: [quant, swe, consulting, other]
+  max_jobs_per_category: 10
+  faang_companies: [meta, facebook, amazon, apple, netflix, google, alphabet]
+
+# SMS nudge (OFF). To enable later: set enabled: true,
 # uncomment twilio in requirements.txt, and add the TWILIO_* secrets.
 sms:
   enabled: false
   # template; {n} is replaced with the new-job count
-  template: "{n} new SWE/quant/consulting internships today. Check your email for the digest."
+  template: "{n} new SWE/quant/consulting roles today. Check Discord for the digest."
   # don't send an SMS unless at least this many new jobs (avoids paying for tiny alerts)
   min_jobs: 1
 
 # If true, send nothing on days with zero new jobs (recommended — no noise).
 suppress_when_empty: true
 
-# Auto-apply tool (LOCAL only: python -m src.apply). The daily email job ignores this.
+# Auto-apply tool (LOCAL only: python -m src.apply). The daily Discord job ignores this.
 apply:
   # auto_simple_review_hard: auto-submit forms with no extra required fields,
   #                          pause for your review when a form has custom questions.
@@ -52,5 +60,5 @@ apply:
   generate_cover_letter: true   # needs GEMINI_API_KEY (Gemini 2.5 Flash)
   daily_limit: 10               # max applications per run
   # ATSes the apply tool knows how to fill. Jobs from other sources are skipped
-  # (you still get them in the email digest).
+  # (you still get them in the Discord digest).
   supported_ats: [greenhouse, lever, ashby]

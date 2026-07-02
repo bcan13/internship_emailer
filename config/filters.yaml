@@ -1,12 +1,15 @@
 # Filtering rules. Everything here is tunable without touching code.
-# A job is kept only if it passes ALL of: role/season, category keywords, US location, active.
+# A job is kept only if it passes ALL of: category-specific role target, season/year, US location, active.
 
 # ---------------------------------------------------------------------------
 # 1) ROLE / SEASON
 # ---------------------------------------------------------------------------
 role:
-  # We only want internships (not new-grad full-time / experienced).
-  require_internship: true
+  # Role target by category. This fork keeps quant internships, but new-grad
+  # roles for every other category.
+  targets_by_category:
+    quant: internship
+    default: new_grad
 
   # Title substrings (lowercased) that mark a posting as an internship.
   internship_terms:
@@ -18,6 +21,27 @@ role:
     - summer analyst        # banks/quant call interns "summer analyst"
     - industrial placement
     - student
+
+  # Title substrings that mark a non-quant posting as entry-level/new-grad.
+  new_grad_terms:
+    - new grad
+    - new graduate
+    - university grad
+    - university graduate
+    - recent grad
+    - recent graduate
+    - early career
+    - entry level
+    - entry-level
+    - campus
+    - graduate program
+    - graduate analyst
+    - associate consultant
+    - business analyst
+    - software engineer i
+    - software developer i
+    - "full-time"
+    - "full time"
 
   # If a title contains any of these, it is rejected outright (full-time/senior roles).
   # NOTE: applied carefully — "intern" titles win even if "engineer" appears.
@@ -31,7 +55,7 @@ role:
     - "full-time" # only excluded when no internship term present (see code)
     - "full time"
 
-  # Seasons we accept. A job's season is detected from tags or title.
+  # Seasons we accept when a season is detected. New-grad roles often omit one.
   # Empty list = accept any season.
   seasons:
     - summer

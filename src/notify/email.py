@@ -57,8 +57,8 @@ def _counts_summary(grouped: list[tuple[str, list[Job]]]) -> str:
 def build_subject(jobs: list[Job], grouped, prefix: str, faang: list[Job] | None = None) -> str:
     if faang:
         names = ", ".join(sorted({j.company for j in faang}))
-        return f"🚨 FAANG job out now — {names} ({len(jobs)} new internship(s))"
-    return f"{prefix} {len(jobs)} new internship(s) — {_counts_summary(grouped)}"
+        return f"🚨 FAANG job out now — {names} ({len(jobs)} new role(s))"
+    return f"{prefix} {len(jobs)} new role(s) — {_counts_summary(grouped)}"
 
 
 def _faang_banner(faang: list[Job]) -> str:
@@ -90,7 +90,7 @@ def build_html(grouped: list[tuple[str, list[Job]]], total: int, faang: list[Job
         rows.append(_faang_banner(faang))
     rows.append(
         f"<p style='font:14px system-ui,sans-serif;color:#444'>"
-        f"<b>{total}</b> new internship posting(s) matched your filters.</p>"
+        f"<b>{total}</b> new role posting(s) matched your filters.</p>"
     )
     for cat, jobs in grouped:
         label = _CATEGORY_LABELS.get(cat, cat)
@@ -132,7 +132,7 @@ def build_text(grouped: list[tuple[str, list[Job]]], total: int, faang: list[Job
         for j in sorted(faang, key=lambda x: (x.company.lower(), x.title.lower())):
             lines.append(f"  -> {j.title} — {j.company}  {j.url}")
         lines.append("")
-    lines += [f"{total} new internship posting(s):", ""]
+    lines += [f"{total} new role posting(s):", ""]
     for cat, jobs in grouped:
         lines.append(f"== {_CATEGORY_LABELS.get(cat, cat)} ({len(jobs)}) ==")
         for j in sorted(jobs, key=lambda x: (x.company.lower(), x.title.lower())):

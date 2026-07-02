@@ -1,1 +1,1 @@
-"""Notification channels: email digest + SMS nudge."""
+"""Notification channels: Discord digest, email digest, and SMS nudge."""

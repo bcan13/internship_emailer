@@ -1,8 +1,9 @@
-"""Filtering: keep only US summer/spring internships in our target categories.
+"""Filtering: keep only US roles matching the configured category/role targets.
 
-A job passes only if it is (1) an internship in an allowed season/year,
-(2) matches a category keyword group, and (3) is US-located. As a side effect,
-`apply_filters` annotates each kept Job with `.category`, `.season`, `.year`.
+A job passes only if it is (1) a configured role type for its category,
+(2) in an allowed season/year when applicable, and (3) US-located. As a side
+effect, `apply_filters` annotates each kept Job with `.category`, `.season`,
+`.year`.
 """
 
 from __future__ import annotations
@@ -91,12 +92,34 @@ def is_internship(title_lc: str, role_cfg: dict) -> bool:
     return True
 
 
+def is_new_grad(title_lc: str, role_cfg: dict) -> bool:
+    intern_terms = [t.lower() for t in role_cfg.get("internship_terms", [])]
+    if _contains_any(title_lc, intern_terms):
+        return False
+    hard_excludes = [
+        e.lower()
+        for e in role_cfg.get("exclude_terms", [])
+        if e.lower() not in _FULLTIME_VARIANTS
+    ]
+    if _contains_any(title_lc, hard_excludes):
+        return False
+    new_grad_terms = [t.lower() for t in role_cfg.get("new_grad_terms", [])]
+    return _contains_any(title_lc, new_grad_terms)
+
+
 def classify_category(title_lc: str, categories_cfg: dict) -> Optional[str]:
     # Dict order is significant (quant before swe before consulting).
     for cat, terms in categories_cfg.items():
         if _contains_any(title_lc, [t.lower() for t in terms]):
             return cat
     return None
+
+
+def role_target_for_category(category: str, role_cfg: dict) -> str:
+    targets = role_cfg.get("targets_by_category")
+    if not targets:
+        return "internship" if role_cfg.get("require_internship", True) else "any"
+    return str(targets.get(category, targets.get("default", "any"))).lower()
 
 
 def is_us_location(job: Job, loc_cfg: dict) -> bool:
@@ -122,29 +145,34 @@ def passes(job: Job, f: dict) -> bool:
     role_cfg = f.get("role", {})
     loc_cfg = f.get("location", {})
 
-    # 1) Internship?
-    if role_cfg.get("require_internship", True) and not is_internship(title_lc, role_cfg):
+    # 1) Category.
+    category = classify_category(title_lc, f.get("categories", {}))
+    if f.get("require_category", True) and not category:
+        return False
+    job.category = category or "other"
+
+    # 2) Category-specific role target.
+    target = role_target_for_category(job.category, role_cfg)
+    if target == "internship" and not is_internship(title_lc, role_cfg):
+        return False
+    if target in {"new_grad", "new-grad", "newgrad"} and not is_new_grad(title_lc, role_cfg):
+        return False
+    if target not in {"internship", "new_grad", "new-grad", "newgrad", "any"}:
         return False
 
-    # 2) Season window.
+    # 3) Season window.
     season = detect_season(job)
     allowed_seasons = [s.lower() for s in role_cfg.get("seasons", [])]
     if allowed_seasons and season and season not in allowed_seasons:
         return False
     job.season = season
 
-    # 3) Year window.
+    # 4) Year window.
     year = detect_year(job)
     allowed_years = role_cfg.get("years", [])
     if allowed_years and year and year not in allowed_years:
         return False
     job.year = year
-
-    # 4) Category.
-    category = classify_category(title_lc, f.get("categories", {}))
-    if f.get("require_category", True) and not category:
-        return False
-    job.category = category or "other"
 
     # 5) US location.
     if not is_us_location(job, loc_cfg):

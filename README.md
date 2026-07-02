@@ -1,24 +1,23 @@
 # intern_pos_emailer
 
-A bot that **runs daily on GitHub Actions** and **emails you** **new US
-software / quant / consulting internship openings** (Summer & Spring / off-cycle).
+A bot that **runs every 2 hours on GitHub Actions** and posts to **Discord** with new US
+quant internship openings plus software / consulting new-grad openings.
 It pulls from community internship aggregators and directly from company career
 sites (via their ATS APIs), filters to what you care about, remembers what it has
 already shown you, and only alerts on **new** postings.
 
 ```
 sources (github lists + Greenhouse/Lever/Ashby/Workday)
-   → normalize → filter (internship · season · category · US)
+   → normalize → filter (quant internship OR non-quant new-grad · category · US)
    → dedup vs data/seen_jobs.json
-   → email digest (Gmail)
+   → Discord webhook digest
    → commit updated state back to the repo
 ```
 
-> SMS (Twilio) is supported but **off by default** — this is an email-only setup.
-> To turn it on later, see "Optional: SMS" below.
+> Email (Gmail) and SMS (Twilio) are still supported but **off by default**.
 
 ## What it tracks
-- **Roles:** internships only — Summer & Spring / off-cycle / co-op (configurable).
+- **Roles:** quant internships; new-grad/full-time entry roles for everything else.
 - **Categories:** software engineering, software development, quant dev, quant
   trading, big tech, unicorns, startups, consulting (tech tracks).
 - **Location:** United States (incl. US-remote).
@@ -31,10 +30,10 @@ config/        # all tunables (no code): companies, github lists, filters, setti
 src/sources/   # one module per source type (github lists + 4 ATS APIs)
 src/filters.py # internship / season / category / US-location rules
 src/dedup.py   # seen-jobs state (data/seen_jobs.json)
-src/notify/    # email.py (Gmail SMTP) + sms.py (Twilio)
+src/notify/    # discord.py (webhook) + optional email.py/SMS
 src/apply/     # FUTURE auto-apply scaffold (not yet implemented)
 src/main.py    # orchestrator + CLI
-.github/workflows/daily.yml  # the daily cron
+.github/workflows/daily.yml  # the scheduled cron
 tests/         # pytest: filters + dedup
 ```
 
@@ -49,13 +48,13 @@ python -m src.main --dry-run
 
 Add credentials to send for real:
 ```bash
-cp .env.example .env      # then fill in GMAIL_USER / GMAIL_APP_PASSWORD / EMAIL_TO
-python -m src.main --test-notify   # sends one sample email to verify creds
+cp .env.example .env      # then fill in DISCORD_WEBHOOK_URL
+python -m src.main --test-notify   # sends one sample Discord notification
 python -m src.main                 # full run
 ```
 
 **First-run tip:** with an empty `data/seen_jobs.json`, the first real run will
-email the *entire current backlog* (~hundreds of postings) in one digest. If you'd
+post the *entire current backlog* (~hundreds of postings) in one digest. If you'd
 rather start clean and only get *new* postings from then on, seed the state once:
 ```bash
 python -m src.main --seed   # marks everything currently open as "seen", sends nothing
@@ -73,28 +72,27 @@ and/or in a local `.env` (see `.env.example`). With none set, the bot still runs
 
 | Secret | What it is |
 | --- | --- |
-| `GMAIL_USER` | Gmail address to send from |
-| `GMAIL_APP_PASSWORD` | 16-char [App Password](https://myaccount.google.com/apppasswords) (needs 2FA on) — **not** your login password |
-| `EMAIL_TO` | where the digest goes (comma-separate for multiple) |
+| `DISCORD_WEBHOOK_URL` | Discord channel webhook URL |
 
-That's the whole setup — email is free and needs no other accounts.
+That's the whole setup. In Discord, go to channel settings, Integrations, Webhooks,
+then create/copy the webhook URL.
 
-## Deploy (private repo + daily cron)
+## Deploy (private repo + every-2-hours cron)
 1. Create a **private** GitHub repo and push this project.
-2. Add the secrets above.
+2. Add the `DISCORD_WEBHOOK_URL` secret.
 3. (Optional) Run `python -m src.main --seed` locally once and commit the updated
-   `data/seen_jobs.json`, so your first scheduled email is a small delta rather than
+   `data/seen_jobs.json`, so your first scheduled Discord post is a small delta rather than
    the whole backlog.
-4. The workflow `.github/workflows/daily.yml` runs at **13:00 UTC daily** and also
+4. The workflow `.github/workflows/daily.yml` runs **every 2 hours** and also
    on-demand from the **Actions tab** (`workflow_dispatch`, with a dry-run toggle).
 5. Each run commits the updated `data/seen_jobs.json` back to the repo, so the bot
    remembers what it already sent.
 
 Notes:
-- Private-repo Actions get 2,000 free minutes/month; a run is ~1–2 min → effectively free.
-- GitHub disables scheduled workflows after **60 days of no repo activity** — the daily
+- Private-repo Actions get 2,000 free minutes/month on GitHub Free. Running every 2 hours is about 360 runs/month; at ~1-3 minutes each, that is roughly 360-1,080 minutes/month, leaving a conservative buffer for manual runs or slower days.
+- GitHub disables scheduled workflows after **60 days of no repo activity** — the recurring
   state commit normally counts, but you can also re-trigger manually to keep it alive.
-- Adjust the time by editing the `cron:` line (it's in UTC).
+- Adjust the cadence by editing the `cron:` line (it's in UTC).
 
 ## Tuning
 - **`config/companies.yaml`** — add companies by ATS + token. Quant firms and
@@ -103,18 +101,23 @@ Notes:
 - **`config/github_lists.yaml`** — the community `listings.json` URLs. These repos
   roll names each cycle (`Summer2026` → `Summer2027`); update the URL when the new
   cycle's repo appears.
-- **`config/filters.yaml`** — keywords, allowed seasons/years, and US location terms.
-- **`config/settings.yaml`** — digest format, state pruning, suppression.
+- **`config/filters.yaml`** — role targets, keywords, allowed seasons/years, and US location terms.
+- **`config/settings.yaml`** — Discord digest format, state pruning, suppression.
+
+## Optional: Email
+Email is still available through Gmail SMTP. To enable it:
+1. In `config/settings.yaml`, set `email.enabled: true`.
+2. Add `GMAIL_USER`, `GMAIL_APP_PASSWORD`, and `EMAIL_TO` as secrets / `.env` values.
 
 ## Optional: SMS
-This is an email-only setup, but an SMS-nudge channel (`src/notify/sms.py`, via
+An SMS-nudge channel (`src/notify/sms.py`, via
 Twilio) ships dormant. To enable it later:
 1. In `config/settings.yaml`, set `sms.enabled: true`.
 2. Uncomment `twilio>=8` in `requirements.txt` and reinstall.
 3. Add `TWILIO_ACCOUNT_SID`, `TWILIO_AUTH_TOKEN`, `TWILIO_FROM`, `SMS_TO` (E.164)
    as secrets / `.env` values, and uncomment them in `.github/workflows/daily.yml`.
 
-It sends a short "N new internships today" text alongside the email digest. Twilio
+It sends a short "N new roles today" text alongside the Discord digest. Twilio
 costs a few cents per message.
 
 ## Auto-apply (local) — implemented

@@ -1,10 +1,9 @@
-name: Daily internship digest
+name: Every 2 hours job digest
 
 on:
   schedule:
-    # 13:00 UTC ~= 9:00 AM US Eastern (8:00 AM during standard time).
-    # GitHub cron can be delayed under load; that's fine for a daily digest.
-    - cron: "0 13 * * *"
+    # Run every 2 hours. GitHub cron can be delayed under load.
+    - cron: "0 */2 * * *"
   workflow_dispatch:
     # Manual trigger from the Actions tab — use it to test or to keep the
     # schedule alive (GitHub disables crons after 60 days of repo inactivity).
@@ -18,7 +17,7 @@ permissions:
   contents: write   # needed to commit the updated data/seen_jobs.json
 
 concurrency:
-  group: daily-internship-digest
+  group: every-2-hours-job-digest
   cancel-in-progress: false
 
 jobs:
@@ -39,9 +38,12 @@ jobs:
 
       - name: Run bot
         env:
-          GMAIL_USER: ${{ secrets.GMAIL_USER }}
-          GMAIL_APP_PASSWORD: ${{ secrets.GMAIL_APP_PASSWORD }}
-          EMAIL_TO: ${{ secrets.EMAIL_TO }}
+          DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+          # Email is off by default. If you enable it in config/settings.yaml,
+          # also add these secrets:
+          # GMAIL_USER: ${{ secrets.GMAIL_USER }}
+          # GMAIL_APP_PASSWORD: ${{ secrets.GMAIL_APP_PASSWORD }}
+          # EMAIL_TO: ${{ secrets.EMAIL_TO }}
           # SMS is off by default. If you enable it in config/settings.yaml, also
           # add these secrets:
           # TWILIO_ACCOUNT_SID: ${{ secrets.TWILIO_ACCOUNT_SID }}
