@@ -43,7 +43,7 @@ def build_content(
 
 
 def build_embeds(jobs: list[Job], discord_cfg: dict) -> list[dict]:
-    order = discord_cfg.get("category_order", ["quant", "swe", "consulting", "other"])
+    order = discord_cfg.get("category_order", ["quant", "swe", "other"])
     grouped = group_by_category(jobs, order)
     max_jobs = int(discord_cfg.get("max_jobs_per_category", 10))
     embeds = []
@@ -70,7 +70,7 @@ def send_discord(jobs: list[Job], secrets: dict[str, str], discord_cfg: dict) ->
         log.warning("discord skipped: DISCORD_WEBHOOK_URL not set")
         return False
 
-    order = discord_cfg.get("category_order", ["quant", "swe", "consulting", "other"])
+    order = discord_cfg.get("category_order", ["quant", "swe", "other"])
     grouped = group_by_category(jobs, order)
     faang = faang_jobs(jobs, discord_cfg.get("faang_companies", []))
     payload = {

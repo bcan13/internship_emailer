@@ -29,6 +29,11 @@ def test_quant_intern_classified_as_quant():
     assert j.category == "quant"
 
 
+def test_consulting_roles_rejected():
+    j = _job("Associate Consultant, New Grad", ["Boston, MA"])
+    assert not passes(j, F)
+
+
 def test_consulting_intern_rejected():
     j = _job("Technology Analyst Intern", ["Boston, MA"])
     assert not passes(j, F)
@@ -45,10 +50,25 @@ def test_new_grad_fulltime_kept():
     assert j.category == "swe"
 
 
-def test_fulltime_swe_kept():
+def test_generic_fulltime_swe_rejected():
     j = _job("Software Engineer I, Full-Time", ["Seattle, WA"])
+    assert not passes(j, F)
+
+
+def test_early_career_swe_kept():
+    j = _job("Software Engineer, Early Career", ["Seattle, WA"])
     assert passes(j, F)
     assert j.category == "swe"
+
+
+def test_software_engineer_ii_rejected():
+    j = _job("Software Engineer II", ["Seattle, WA"])
+    assert not passes(j, F)
+
+
+def test_software_engineer_ii_early_career_rejected():
+    j = _job("Software Engineer II, Early Career", ["Seattle, WA"])
+    assert not passes(j, F)
 
 
 def test_non_us_location_rejected():

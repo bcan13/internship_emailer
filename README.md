@@ -1,7 +1,7 @@
 # intern_pos_emailer
 
 A bot that **runs every 2 hours on GitHub Actions** and posts to **Discord** with new US
-quant internship openings plus software / consulting new-grad openings.
+quant internship openings plus software new-grad / early-career openings.
 It pulls from community internship aggregators and directly from company career
 sites (via their ATS APIs), filters to what you care about, remembers what it has
 already shown you, and only alerts on **new** postings.
@@ -17,9 +17,8 @@ sources (github lists + Greenhouse/Lever/Ashby/Workday)
 > Email (Gmail) and SMS (Twilio) are still supported but **off by default**.
 
 ## What it tracks
-- **Roles:** quant internships; new-grad/full-time entry roles for everything else.
-- **Categories:** software engineering, software development, quant dev, quant
-  trading, big tech, unicorns, startups, consulting (tech tracks).
+- **Roles:** quant internships; explicit new-grad or early-career software roles.
+- **Categories:** software engineering, software development, quant dev, and quant trading.
 - **Location:** United States (incl. US-remote).
 
 All of this is tunable in `config/` — no code changes needed.
@@ -95,8 +94,7 @@ Notes:
 - Adjust the cadence by editing the `cron:` line (it's in UTC).
 
 ## Tuning
-- **`config/companies.yaml`** — add companies by ATS + token. Quant firms and
-  consulting are seeded here because the community lists skew SWE. Some seed tokens
+- **`config/companies.yaml`** — add companies by ATS + token. Quant firms are seeded here because the community lists skew SWE. Some seed tokens
   are best-effort — run `--dry-run` and disable any that 404 (`enabled: false`).
 - **`config/github_lists.yaml`** — the community `listings.json` URLs. These repos
   roll names each cycle (`Summer2026` → `Summer2027`); update the URL when the new

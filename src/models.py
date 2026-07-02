@@ -10,7 +10,7 @@ from typing import Optional
 from pydantic import BaseModel, Field
 
 # Categories a job can be classified into (set during filtering).
-Category = str  # one of: "swe", "quant", "consulting", "other"
+Category = str  # one of: "swe", "quant", "other"
 
 
 def normalize_title(title: str) -> str:

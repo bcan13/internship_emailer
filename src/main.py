@@ -51,7 +51,7 @@ def collect_jobs(limit: int | None = None) -> list[Job]:
 
 def _print_digest(jobs: list[Job]) -> None:
     order = config.settings().get("discord", {}).get(
-        "category_order", ["quant", "swe", "consulting", "other"]
+        "category_order", ["quant", "swe", "other"]
     )
     grouped = email_notify.group_by_category(jobs, order)
     print("\n" + "=" * 70)

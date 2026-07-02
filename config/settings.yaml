@@ -24,7 +24,7 @@ email:
   enabled: false
   subject_prefix: "[Intern Alert]"
   # group order in the digest
-  category_order: [swe, quant, consulting, other]
+  category_order: [quant, swe, other]
   # When a NEW posting is from one of these companies, the digest goes URGENT:
   # subject + headline become "FAANG job out now" and the roles are banner-ed at
   # the top. Edit freely (e.g. add nvidia, microsoft).
@@ -34,7 +34,7 @@ email:
 discord:
   enabled: true
   subject_prefix: "[Job Alert]"
-  category_order: [quant, swe, consulting, other]
+  category_order: [quant, swe, other]
   max_jobs_per_category: 10
   faang_companies: [meta, facebook, amazon, apple, netflix, google, alphabet]
 
@@ -43,7 +43,7 @@ discord:
 sms:
   enabled: false
   # template; {n} is replaced with the new-job count
-  template: "{n} new SWE/quant/consulting roles today. Check Discord for the digest."
+  template: "{n} new SWE/quant roles today. Check Discord for the digest."
   # don't send an SMS unless at least this many new jobs (avoids paying for tiny alerts)
   min_jobs: 1
 

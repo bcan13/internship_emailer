@@ -1,5 +1,5 @@
 # Direct company career-site pulls via their Applicant Tracking System (ATS)
-# public JSON APIs. This catches quant/consulting roles the SWE-only community
+# public JSON APIs. This catches quant roles the SWE-only community
 # lists miss, and surfaces postings earlier.
 #
 # How to find a company's token:

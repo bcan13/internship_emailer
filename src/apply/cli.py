@@ -100,7 +100,7 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--prepare-only", action="store_true", help="fill forms but never submit")
     parser.add_argument("--headless", action="store_true", help="no visible browser (testing)")
     parser.add_argument("--no-cover-letter", action="store_true", help="don't generate cover letters")
-    parser.add_argument("--category", choices=["swe", "quant", "consulting"], help="only this category")
+    parser.add_argument("--category", choices=["swe", "quant"], help="only this category")
     parser.add_argument("--company", help="only companies whose name contains this")
     parser.add_argument("--mode", choices=["auto_simple_review_hard", "review_all", "auto_all"])
     parser.add_argument("--retry-failed", action="store_true", help="re-attempt jobs previously marked failed")

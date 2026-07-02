@@ -108,7 +108,7 @@ def is_new_grad(title_lc: str, role_cfg: dict) -> bool:
 
 
 def classify_category(title_lc: str, categories_cfg: dict) -> Optional[str]:
-    # Dict order is significant (quant before swe before consulting).
+    # Dict order is significant (quant before generic SWE).
     for cat, terms in categories_cfg.items():
         if _contains_any(title_lc, [t.lower() for t in terms]):
             return cat

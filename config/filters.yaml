@@ -33,15 +33,6 @@ role:
     - early career
     - entry level
     - entry-level
-    - campus
-    - graduate program
-    - graduate analyst
-    - associate consultant
-    - business analyst
-    - software engineer i
-    - software developer i
-    - "full-time"
-    - "full time"
 
   # If a title contains any of these, it is rejected outright (full-time/senior roles).
   # NOTE: applied carefully — "intern" titles win even if "engineer" appears.
@@ -52,6 +43,16 @@ role:
     - lead
     - manager
     - director
+    - "software engineer ii"
+    - "software developer ii"
+    - "swe ii"
+    - "sde ii"
+    - "engineer ii"
+    - "developer ii"
+    - "level ii"
+    - "software engineer 2"
+    - "software developer 2"
+    - "sde 2"
     - "full-time" # only excluded when no internship term present (see code)
     - "full time"
 
@@ -103,13 +104,6 @@ categories:
     - "infrastructure engineer"
     - "platform engineer"
     - "systems engineer"
-  consulting:
-    - consulting
-    - consultant
-    - "technology analyst"
-    - "tech consulting"
-    - "business analyst"   # consulting firms' entry tech/strategy track
-
 # If true, a job must match at least one category group to be kept.
 require_category: true
 
