@@ -48,22 +48,19 @@ def test_send_discord_posts_webhook(monkeypatch):
 
 
 
-def test_build_embeds_mentions_attachment_when_truncated():
+def test_build_embeds_paginates_full_list_when_truncated():
     jobs = [_job(f"Acme{i}") for i in range(3)]
-    embeds = D.build_embeds(jobs, {"category_order": ["swe"], "max_jobs_per_category": 1})
-    assert "...and 2 more" in embeds[0]["description"]
-    assert "jobs.txt" in embeds[0]["description"]
+    embeds = D.build_embeds(jobs, {"category_order": ["swe"], "jobs_per_embed": 1})
+    assert len(embeds) == 3
+    assert embeds[0]["title"].endswith("(1-1 of 3)")
+    assert embeds[1]["title"].endswith("(2-2 of 3)")
+    assert "Acme0" in embeds[0]["description"]
+    assert "Acme1" in embeds[1]["description"]
+    assert "Acme2" in embeds[2]["description"]
+    assert "...and" not in embeds[0]["description"]
 
 
-def test_build_attachment_text_includes_all_jobs():
-    jobs = [_job(f"Acme{i}") for i in range(3)]
-    text = D.build_attachment_text(jobs, {"category_order": ["swe"]})
-    assert "Acme0" in text
-    assert "Acme1" in text
-    assert "Acme2" in text
-
-
-def test_send_discord_attaches_full_list_when_truncated(monkeypatch):
+def test_send_discord_splits_more_than_ten_embeds(monkeypatch):
     calls = []
 
     class Response:
@@ -75,11 +72,14 @@ def test_send_discord_attaches_full_list_when_truncated(monkeypatch):
         return Response()
 
     monkeypatch.setattr(D.requests, "post", fake_post)
-    jobs = [_job(f"Acme{i}") for i in range(3)]
+    jobs = [_job(f"Acme{i}") for i in range(11)]
     assert D.send_discord(
         jobs,
         {"DISCORD_WEBHOOK_URL": "https://discord.test/hook"},
-        {"category_order": ["swe"], "max_jobs_per_category": 1},
+        {"category_order": ["swe"], "jobs_per_embed": 1},
     )
-    assert "files" in calls[0][1]
-    assert calls[0][1]["files"]["files[0]"][0] == "jobs.txt"
+    assert len(calls) == 2
+    assert len(calls[0][1]["json"]["embeds"]) == 10
+    assert len(calls[1][1]["json"]["embeds"]) == 1
+    assert "content" in calls[0][1]["json"]
+    assert "content" not in calls[1][1]["json"]
