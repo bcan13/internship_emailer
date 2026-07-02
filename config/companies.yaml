@@ -44,6 +44,7 @@ greenhouse:
   - { company: Robinhood,          token: robinhood }
   - { company: Affirm,             token: affirm }
   - { company: Brex,               token: brex }
+  - { company: Lyft,           token: lyft }
   - { company: Discord,            token: discord }
   - { company: Samsara,            token: samsara }
   - { company: Nuro,               token: nuro }
@@ -67,6 +68,7 @@ ashby:
 workday:
   # tenant + wd_num + site come from the careers URL; verify each before trusting.
   - { company: NVIDIA,         tenant: nvidia,     wd_num: 5,  site: NVIDIAExternalCareerSite }
+  - { company: Visa,          tenant: visa,      wd_num: 5,  site: Visa }
   - { company: Salesforce,     tenant: salesforce, wd_num: 12, site: External_Career_Site }
   - { company: Capital One,    tenant: capitalone, wd_num: 12, site: Capital_One }
   - { company: Morgan Stanley, tenant: ms, wd_num: 5, site: External }
