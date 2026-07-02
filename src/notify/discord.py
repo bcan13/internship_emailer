@@ -2,7 +2,9 @@
 
 from __future__ import annotations
 
+import json
 import logging
+
 
 import requests
 
@@ -12,6 +14,7 @@ from .email import _CATEGORY_LABELS, faang_jobs, group_by_category
 log = logging.getLogger(__name__)
 
 DISCORD_EMBED_LIMIT = 6000
+ATTACHMENT_NOTE = "Open the attached jobs.txt for the full list."
 
 
 def _truncate(text: str, limit: int) -> str:
@@ -42,6 +45,28 @@ def build_content(
     return _truncate(f"{prefix} {len(jobs)} new role(s): {summary}", 2000)
 
 
+def has_overflow(jobs: list[Job], discord_cfg: dict) -> bool:
+    order = discord_cfg.get("category_order", ["quant", "swe", "other"])
+    grouped = group_by_category(jobs, order)
+    max_jobs = int(discord_cfg.get("max_jobs_per_category", 10))
+    return any(len(group) > max_jobs for _, group in grouped)
+
+
+def build_attachment_text(jobs: list[Job], discord_cfg: dict) -> str:
+    order = discord_cfg.get("category_order", ["quant", "swe", "other"])
+    grouped = group_by_category(jobs, order)
+    lines = [f"{len(jobs)} new matching role(s)", ""]
+    for cat, group in grouped:
+        label = _CATEGORY_LABELS.get(cat, cat)
+        lines.append(f"== {label} ({len(group)}) ==")
+        for job in sorted(group, key=lambda x: (x.company.lower(), x.title.lower())):
+            loc = job.location_str or "Location not listed"
+            lines.append(f"- {job.title} -- {job.company} [{loc}]")
+            lines.append(f"  {job.url}")
+        lines.append("")
+    return "\n".join(lines)
+
+
 def build_embeds(jobs: list[Job], discord_cfg: dict) -> list[dict]:
     order = discord_cfg.get("category_order", ["quant", "swe", "other"])
     grouped = group_by_category(jobs, order)
@@ -52,7 +77,7 @@ def build_embeds(jobs: list[Job], discord_cfg: dict) -> list[dict]:
         shown = sorted_jobs[:max_jobs]
         description = "\n\n".join(_job_line(j) for j in shown)
         if len(sorted_jobs) > len(shown):
-            description += f"\n\n...and {len(sorted_jobs) - len(shown)} more."
+            description += f"\n\n...and {len(sorted_jobs) - len(shown)} more. {ATTACHMENT_NOTE}"
         embeds.append(
             {
                 "title": f"{_CATEGORY_LABELS.get(cat, cat)} ({len(sorted_jobs)})",
@@ -84,7 +109,21 @@ def send_discord(jobs: list[Job], secrets: dict[str, str], discord_cfg: dict) ->
     }
 
     try:
-        response = requests.post(webhook_url, json=payload, timeout=15)
+        if has_overflow(jobs, discord_cfg):
+            response = requests.post(
+                webhook_url,
+                data={"payload_json": json.dumps(payload)},
+                files={
+                    "files[0]": (
+                        "jobs.txt",
+                        build_attachment_text(jobs, discord_cfg),
+                        "text/plain",
+                    )
+                },
+                timeout=15,
+            )
+        else:
+            response = requests.post(webhook_url, json=payload, timeout=15)
         response.raise_for_status()
         log.info("discord webhook sent (%d jobs)", len(jobs))
         return True

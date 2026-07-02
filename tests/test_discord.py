@@ -37,11 +37,49 @@ def test_send_discord_posts_webhook(monkeypatch):
         def raise_for_status(self):
             return None
 
-    def fake_post(url, json, timeout):
-        calls.append((url, json, timeout))
+    def fake_post(url, **kwargs):
+        calls.append((url, kwargs))
         return Response()
 
     monkeypatch.setattr(D.requests, "post", fake_post)
     assert D.send_discord([_job("Acme")], {"DISCORD_WEBHOOK_URL": "https://discord.test/hook"}, {})
     assert calls[0][0] == "https://discord.test/hook"
-    assert calls[0][1]["embeds"]
+    assert calls[0][1]["json"]["embeds"]
+
+
+
+def test_build_embeds_mentions_attachment_when_truncated():
+    jobs = [_job(f"Acme{i}") for i in range(3)]
+    embeds = D.build_embeds(jobs, {"category_order": ["swe"], "max_jobs_per_category": 1})
+    assert "...and 2 more" in embeds[0]["description"]
+    assert "jobs.txt" in embeds[0]["description"]
+
+
+def test_build_attachment_text_includes_all_jobs():
+    jobs = [_job(f"Acme{i}") for i in range(3)]
+    text = D.build_attachment_text(jobs, {"category_order": ["swe"]})
+    assert "Acme0" in text
+    assert "Acme1" in text
+    assert "Acme2" in text
+
+
+def test_send_discord_attaches_full_list_when_truncated(monkeypatch):
+    calls = []
+
+    class Response:
+        def raise_for_status(self):
+            return None
+
+    def fake_post(url, **kwargs):
+        calls.append((url, kwargs))
+        return Response()
+
+    monkeypatch.setattr(D.requests, "post", fake_post)
+    jobs = [_job(f"Acme{i}") for i in range(3)]
+    assert D.send_discord(
+        jobs,
+        {"DISCORD_WEBHOOK_URL": "https://discord.test/hook"},
+        {"category_order": ["swe"], "max_jobs_per_category": 1},
+    )
+    assert "files" in calls[0][1]
+    assert calls[0][1]["files"]["files[0]"][0] == "jobs.txt"

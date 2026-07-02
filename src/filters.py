@@ -142,8 +142,12 @@ def is_us_location(job: Job, loc_cfg: dict) -> bool:
 def passes(job: Job, f: dict) -> bool:
     """Return True if the job should be kept; annotates the job in place."""
     title_lc = _lc(job.title)
+    searchable_lc = _lc(f"{job.title} {job.url}")
     role_cfg = f.get("role", {})
     loc_cfg = f.get("location", {})
+
+    if _contains_any(searchable_lc, [t.lower() for t in f.get("exclude_terms", [])]):
+        return False
 
     # 1) Category.
     category = classify_category(title_lc, f.get("categories", {}))

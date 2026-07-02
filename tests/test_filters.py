@@ -101,6 +101,20 @@ def test_out_of_window_year_rejected():
     assert not passes(j, F)
 
 
+def test_2026_url_rejected():
+    j = _job(
+        "Software Engineer, New Grad",
+        ["Seattle, WA"],
+        url="https://example.com/jobs/software-engineer-new-grad-2026",
+    )
+    assert not passes(j, F)
+
+
+def test_2026_title_rejected():
+    j = _job("Software Engineer, New Grad 2026", ["Seattle, WA"])
+    assert not passes(j, F)
+
+
 def test_non_quant_coop_rejected():
     j = _job("Software Engineering Co-op", ["Boston, MA"])
     assert not passes(j, F)
