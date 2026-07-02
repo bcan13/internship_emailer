@@ -144,13 +144,24 @@ def run(
         email_cfg = settings.get("email", {})
         discord_cfg = settings.get("discord", {})
         sms_cfg = settings.get("sms", {})
+        attempted_notify = False
+        sent_notify = False
         if do_discord and discord_cfg.get("enabled", True):
-            discord_notify.send_discord(fresh, secrets, discord_cfg)
+            attempted_notify = True
+            sent_notify = discord_notify.send_discord(fresh, secrets, discord_cfg) or sent_notify
         if do_email and email_cfg.get("enabled", True):
-            email_notify.send_email(fresh, secrets, email_cfg)
+            attempted_notify = True
+            sent_notify = email_notify.send_email(fresh, secrets, email_cfg) or sent_notify
         if do_sms and sms_cfg.get("enabled", True) and len(fresh) >= sms_cfg.get("min_jobs", 1):
+            attempted_notify = True
             body = sms_notify.build_body(len(fresh), sms_cfg.get("template", "{n} new roles"))
-            sms_notify.send_sms(body, secrets)
+            sent_notify = sms_notify.send_sms(body, secrets) or sent_notify
+        if attempted_notify and not sent_notify:
+            log.error("notification failed; state not updated so jobs will be retried")
+            return 1
+        if not attempted_notify:
+            log.error("no notification channel enabled; state not updated")
+            return 1
 
     # Persist: record the new jobs as seen, prune old entries.
     state = update_state(state, fresh, today)
