@@ -82,13 +82,13 @@ then create/copy the webhook URL.
 3. (Optional) Run `python -m src.main --seed` locally once and commit the updated
    `data/seen_jobs.json`, so your first scheduled Discord post is a small delta rather than
    the whole backlog.
-4. The workflow `.github/workflows/daily.yml` runs **every 2 hours** and also
+4. The workflow `.github/workflows/daily.yml` runs **every 2 hours at minute 17 UTC** and also
    on-demand from the **Actions tab** (`workflow_dispatch`, with a dry-run toggle).
 5. Each run commits the updated `data/seen_jobs.json` back to the repo, so the bot
    remembers what it already sent.
 
 Notes:
-- Private-repo Actions get 2,000 free minutes/month on GitHub Free. Running every 2 hours is about 360 runs/month; at ~1-3 minutes each, that is roughly 360-1,080 minutes/month, leaving a conservative buffer for manual runs or slower days.
+- Private-repo Actions get 2,000 free minutes/month on GitHub Free. Running every 2 hours at minute 17 is about 360 runs/month; at ~1-3 minutes each, that is roughly 360-1,080 minutes/month, leaving a conservative buffer for manual runs or slower days.
 - GitHub disables scheduled workflows after **60 days of no repo activity** — the recurring
   state commit normally counts, but you can also re-trigger manually to keep it alive.
 - Adjust the cadence by editing the `cron:` line (it's in UTC).

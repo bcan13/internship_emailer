@@ -2,8 +2,8 @@ name: Every 2 hours job digest
 
 on:
   schedule:
-    # Run every 2 hours. GitHub cron can be delayed under load.
-    - cron: "0 */2 * * *"
+    # Run every 2 hours at minute 17. GitHub cron can be delayed under load.
+    - cron: "17 */2 * * *"
   workflow_dispatch:
     # Manual trigger from the Actions tab — use it to test or to keep the
     # schedule alive (GitHub disables crons after 60 days of repo inactivity).
