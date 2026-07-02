@@ -83,3 +83,24 @@ def test_send_discord_splits_more_than_ten_embeds(monkeypatch):
     assert len(calls[1][1]["json"]["embeds"]) == 1
     assert "content" in calls[0][1]["json"]
     assert "content" not in calls[1][1]["json"]
+
+
+def test_build_embeds_respects_description_limit():
+    long_url = "https://example.com/" + "a" * 900
+    jobs = [_job(f"Acme{i}", url=f"{long_url}{i}") for i in range(12)]
+    embeds = D.build_embeds(jobs, {"category_order": ["swe"], "jobs_per_embed": 12})
+    assert len(embeds) > 1
+    assert all(len(embed["description"]) <= D.DISCORD_EMBED_DESCRIPTION_LIMIT for embed in embeds)
+
+
+def test_embed_batches_respect_total_message_char_limit():
+    embeds = [
+        {"title": f"Page {i}", "description": "x" * 2000}
+        for i in range(4)
+    ]
+    batches = list(D._embed_batches(embeds))
+    assert len(batches) == 2
+    assert all(
+        sum(D._embed_size(embed) for embed in batch) <= D.DISCORD_MESSAGE_EMBED_CHAR_LIMIT
+        for batch in batches
+    )

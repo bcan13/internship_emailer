@@ -11,7 +11,8 @@ from .email import _CATEGORY_LABELS, faang_jobs, group_by_category
 
 log = logging.getLogger(__name__)
 
-DISCORD_EMBED_LIMIT = 6000
+DISCORD_EMBED_DESCRIPTION_LIMIT = 3500
+DISCORD_MESSAGE_EMBED_CHAR_LIMIT = 5800
 
 
 def _truncate(text: str, limit: int) -> str:
@@ -23,7 +24,7 @@ def _job_line(job: Job) -> str:
     loc = job.location_str or "Location not listed"
     meta_bits = [loc, job.season, str(job.year) if job.year else None]
     meta = " - ".join(bit for bit in meta_bits if bit)
-    return _truncate(f"[{job.title}]({job.url})\n{job.company} - {meta}", 1000)
+    return _truncate(f"[{job.title}]({job.url})\n{job.company} - {meta}", 700)
 
 
 def build_content(
@@ -45,9 +46,28 @@ def build_content(
 DISCORD_MAX_EMBEDS = 10
 
 
-def _chunks(items: list[Job], size: int):
-    for i in range(0, len(items), size):
-        yield i, items[i : i + size]
+def _embed_size(embed: dict) -> int:
+    return len(embed.get("title", "")) + len(embed.get("description", ""))
+
+
+def _job_pages(jobs: list[Job], max_jobs: int):
+    page: list[Job] = []
+    page_len = 0
+    for job in jobs:
+        line_len = len(_job_line(job))
+        separator_len = 2 if page else 0
+        if page and (
+            len(page) >= max_jobs
+            or page_len + separator_len + line_len > DISCORD_EMBED_DESCRIPTION_LIMIT
+        ):
+            yield page
+            page = []
+            page_len = 0
+            separator_len = 0
+        page.append(job)
+        page_len += separator_len + line_len
+    if page:
+        yield page
 
 
 def build_embeds(jobs: list[Job], discord_cfg: dict) -> list[dict]:
@@ -61,25 +81,41 @@ def build_embeds(jobs: list[Job], discord_cfg: dict) -> list[dict]:
     for cat, group in grouped:
         sorted_jobs = sorted(group, key=lambda x: (x.company.lower(), x.title.lower()))
         label = _CATEGORY_LABELS.get(cat, cat)
-        for start, chunk in _chunks(sorted_jobs, jobs_per_embed):
-            end = start + len(chunk)
+        pages = list(_job_pages(sorted_jobs, jobs_per_embed))
+        start_index = 1
+        for page in pages:
+            end_index = start_index + len(page) - 1
             title = f"{label} ({len(sorted_jobs)})"
-            if len(sorted_jobs) > jobs_per_embed:
-                title = f"{label} ({start + 1}-{end} of {len(sorted_jobs)})"
-            description = "\n\n".join(_job_line(j) for j in chunk)
+            if len(pages) > 1:
+                title = f"{label} ({start_index}-{end_index} of {len(sorted_jobs)})"
+            description = "\n\n".join(_job_line(j) for j in page)
             embeds.append(
                 {
                     "title": title,
-                    "description": _truncate(description, DISCORD_EMBED_LIMIT - 256),
+                    "description": _truncate(description, DISCORD_EMBED_DESCRIPTION_LIMIT),
                     "color": 0x5865F2,
                 }
             )
+            start_index = end_index + 1
     return embeds
 
 
 def _embed_batches(embeds: list[dict]):
-    for i in range(0, len(embeds), DISCORD_MAX_EMBEDS):
-        yield embeds[i : i + DISCORD_MAX_EMBEDS]
+    batch: list[dict] = []
+    batch_chars = 0
+    for embed in embeds:
+        embed_chars = _embed_size(embed)
+        if batch and (
+            len(batch) >= DISCORD_MAX_EMBEDS
+            or batch_chars + embed_chars > DISCORD_MESSAGE_EMBED_CHAR_LIMIT
+        ):
+            yield batch
+            batch = []
+            batch_chars = 0
+        batch.append(embed)
+        batch_chars += embed_chars
+    if batch:
+        yield batch
 
 
 def send_discord(jobs: list[Job], secrets: dict[str, str], discord_cfg: dict) -> bool:
@@ -109,7 +145,11 @@ def send_discord(jobs: list[Job], secrets: dict[str, str], discord_cfg: dict) ->
             response = requests.post(webhook_url, json=payload, timeout=15)
             response.raise_for_status()
             sent_batches += 1
-        log.info("discord webhook sent (%d jobs across %d message(s))", len(jobs), sent_batches)
+        log.info(
+            "discord webhook sent (%d jobs across %d message(s))",
+            len(jobs),
+            sent_batches,
+        )
         return True
     except Exception as exc:  # noqa: BLE001
         log.error("discord webhook failed: %s", exc)
