@@ -26,14 +26,20 @@ greenhouse:
   - { company: Jump Trading,       token: jumptrading }
   - { company: DRW,                token: drweng }
   - { company: Akuna Capital,      token: akunacapital }
+  - { company: Five Rings,          token: fiveringsllc }
   # big tech / unicorns / startups  (verified tokens)
   - { company: SpaceX,             token: spacex }
   - { company: Stripe,             token: stripe }
   - { company: Databricks,         token: databricks }
+  - { company: Datadog,          token: datadog }
+  - { company: Waymo,           token: waymo }
+  - { company: Glean,           token: gleanwork }
   - { company: Scale AI,           token: scaleai }
   - { company: Airbnb,             token: airbnb }
   - { company: Coinbase,           token: coinbase }
   - { company: Gemini,             token: gemini }
+  - { company: Cohere,          token: cohere }
+  - { company: Snowflake,          token: snowflake }
   - { company: Galaxy Digital,     token: galaxydigitalservices }
   - { company: Robinhood,          token: robinhood }
   - { company: Affirm,             token: affirm }
@@ -47,6 +53,7 @@ greenhouse:
 
 lever:
   - { company: Palantir,           token: palantir }
+  - { company: Belvedere Trading,  token: belvederetrading }
   - { company: Plaid,              token: plaid }
   - { company: Netflix,            token: netflix }
 
