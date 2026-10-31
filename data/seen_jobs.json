@@ -1,9 +1,27 @@
 {
+  "0043a643c6afa143": {
+    "company": "Anduril",
+    "first_seen": "2026-10-31",
+    "title": "2027 Early Career Software Engineer ",
+    "url": "https://boards.greenhouse.io/andurilindustries/jobs/5162263007?gh_jid=5162263007"
+  },
   "00ba12e853cb26eb": {
     "company": "Anduril",
     "first_seen": "2026-10-26",
     "title": "Early Career Software Engineer, Battlespace Awareness",
     "url": "https://boards.greenhouse.io/andurilindustries/jobs/5275431007?gh_jid=5275431007"
+  },
+  "01269a1a391864fb": {
+    "company": "Palantir",
+    "first_seen": "2026-10-31",
+    "title": "Software Engineer, New Grad - Infrastructure",
+    "url": "https://jobs.lever.co/palantir/7d75bed5-45d8-4876-840a-2d92ea79c98d"
+  },
+  "02db035707ae1e40": {
+    "company": "Palantir",
+    "first_seen": "2026-10-31",
+    "title": "Software Engineer, New Grad - Production Infrastructure",
+    "url": "https://jobs.lever.co/palantir/e1a6c138-98bf-45e2-97f7-2c70371cc38a"
   },
   "071d283ca7647715": {
     "company": "DRW",
@@ -251,6 +269,12 @@
     "title": "Software Engineer - New Grad",
     "url": "https://job-boards.greenhouse.io/scaleai/jobs/4730851005"
   },
+  "24d61bf4890ece1c": {
+    "company": "Palantir",
+    "first_seen": "2026-10-31",
+    "title": "Forward Deployed Software Engineer, New Grad - US Government",
+    "url": "https://jobs.lever.co/palantir/d1ac83d0-e923-42a5-8e6d-58dd0cab25ca"
+  },
   "256a15d6456e6e6c": {
     "company": "TransMarket Group",
     "first_seen": "2026-07-24",
@@ -286,6 +310,12 @@
     "first_seen": "2026-09-15",
     "title": "2027 Quantitative Masters Internship Program - Investments - Quantitative Investing - New York",
     "url": "https://zapply.jobs/l/d/workday-blackrock-blackrock-professional-R266473?s=gh-internships-2027"
+  },
+  "2ccb4a007ea06576": {
+    "company": "Palantir",
+    "first_seen": "2026-10-31",
+    "title": "Software Engineer, New Grad - Production Infrastructure",
+    "url": "https://jobs.lever.co/palantir/15844944-fb69-4b57-9531-e988650b20c6"
   },
   "2d57e7322665a988": {
     "company": "Point72",
@@ -346,6 +376,12 @@
     "first_seen": "2026-07-14",
     "title": "Summer Intern 2027 - Quantitative Res",
     "url": "https://job-boards.greenhouse.io/fiveringsllc/jobs/5349219008"
+  },
+  "359b33cceb392c41": {
+    "company": "Palantir",
+    "first_seen": "2026-10-31",
+    "title": "Software Engineer, New Grad - Production Infrastructure",
+    "url": "https://jobs.lever.co/palantir/4d5a144e-87ea-45e2-a68c-3fad590629af"
   },
   "35fbe6b42262a47e": {
     "company": "BlackRock",
@@ -629,6 +665,12 @@
     "title": "Trading Desk Operations Engineer Intern",
     "url": "https://www.janestreet.com/join-jane-street/position/8621450002/"
   },
+  "65307e1c8341bb8a": {
+    "company": "Palantir",
+    "first_seen": "2026-10-31",
+    "title": "Forward Deployed Software Engineer, New Grad - Intel, US Government",
+    "url": "https://jobs.lever.co/palantir/fbca0358-083a-4222-bdbb-3bd729b48382"
+  },
   "65365dcba25c0a70": {
     "company": "Akuna Capital",
     "first_seen": "2026-07-13",
@@ -689,6 +731,12 @@
     "title": "Campus Quantitative Researcher, PhD (Intern)",
     "url": "https://www.jumptrading.com/hr/job?gh_jid=8049938"
   },
+  "6ec23f7f1df7ec6d": {
+    "company": "IMC Trading",
+    "first_seen": "2026-10-31",
+    "title": "Quantitative Research Intern (BS/MS) - Summer 2027",
+    "url": "https://job-boards.eu.greenhouse.io/imc/jobs/4907399101"
+  },
   "70619017504a6a07": {
     "company": "Tower Research Capital",
     "first_seen": "2026-07-05",
@@ -736,6 +784,12 @@
     "first_seen": "2026-09-05",
     "title": "2027 Summer Intern – PhD Quant Research Analyst, Client Solutions & Analytics, US",
     "url": "https://pimco.wd1.myworkdayjobs.com/pimco-careers/job/Newport-Beach-CA-USA/XMLNAME-2027-Summer-Intern---PhD-Quant-Research-Analyst--Client-Solutions---Analytics--US_R106815"
+  },
+  "76a81a171740a660": {
+    "company": "Palantir",
+    "first_seen": "2026-10-31",
+    "title": "Software Engineer, New Grad - Defense",
+    "url": "https://jobs.lever.co/palantir/f362d7aa-360d-4059-ab38-f482742693b3"
   },
   "76e06dda454dd0a1": {
     "company": "Virtu Financial",
@@ -893,6 +947,12 @@
     "title": "Quant & Data Analytics Intern",
     "url": "https://zapply.jobs/l/d/workday-cboe-external-career-cboe-R-4708?s=gh-internships-2027"
   },
+  "8dc08eac954aa0cb": {
+    "company": "IMC Trading",
+    "first_seen": "2026-10-31",
+    "title": "Quantitative Trader Intern - Summer 2027",
+    "url": "https://job-boards.eu.greenhouse.io/imc/jobs/4823923101"
+  },
   "916876881cface37": {
     "company": "Stripe",
     "first_seen": "2026-08-31",
@@ -923,6 +983,12 @@
     "title": "Quantum Software Intern",
     "url": "https://go.vansh.nyc/Xz"
   },
+  "98518018de4aa0fe": {
+    "company": "IMC Trading",
+    "first_seen": "2026-10-31",
+    "title": "Quantitative Research Intern (PhD) - Summer 2027",
+    "url": "https://job-boards.eu.greenhouse.io/imc/jobs/4907400101"
+  },
   "99af6c633b3aac92": {
     "company": "Anthelion Capital",
     "first_seen": "2026-07-27",
@@ -952,6 +1018,12 @@
     "first_seen": "2026-10-26",
     "title": "Quantitative Research Intern",
     "url": "https://go.vansh.nyc/PV"
+  },
+  "9f3be8e022feb5a5": {
+    "company": "Palantir",
+    "first_seen": "2026-10-31",
+    "title": "Software Engineer, New Grad - Infrastructure",
+    "url": "https://jobs.lever.co/palantir/4abf26b4-795c-420a-bf22-1ab98db268b4"
   },
   "9fb5cf768ba59ecb": {
     "company": "Waymo",
@@ -1133,6 +1205,12 @@
     "title": "2027 Quantitative Developer Intern",
     "url": "https://zapply.jobs/l/d/greenhouse-schonfeld-8267092?s=gh-internships-2027"
   },
+  "c67f53b4a3a6aab6": {
+    "company": "Palantir",
+    "first_seen": "2026-10-31",
+    "title": "Software Engineer, New Grad",
+    "url": "https://jobs.lever.co/palantir/94984771-0704-446c-88c6-91ce748f6d92"
+  },
   "c6abdcdd373ba0c3": {
     "company": "Rigetti",
     "first_seen": "2026-09-15",
@@ -1144,6 +1222,12 @@
     "first_seen": "2026-09-05",
     "title": "2027 Systematic COO Intern",
     "url": "https://job-boards.greenhouse.io/schonfeld/jobs/8172059"
+  },
+  "ccabff1ea46c6ab0": {
+    "company": "Palantir",
+    "first_seen": "2026-10-31",
+    "title": "Software Engineer, New Grad",
+    "url": "https://jobs.lever.co/palantir/c34b424e-caf2-455a-b104-ae1096ccca29"
   },
   "cd01761870acca73": {
     "company": "Schonfeld",
@@ -1162,6 +1246,12 @@
     "first_seen": "2026-10-25",
     "title": "Sales and Trading Intern",
     "url": "https://go.vansh.nyc/47"
+  },
+  "cf0b1a5275f818c0": {
+    "company": "Nuro",
+    "first_seen": "2026-10-31",
+    "title": "Software Engineer, AI Platform - New Grad",
+    "url": "https://nuro.ai/careersitem?gh_jid=7351066"
   },
   "d0db488577c14d23": {
     "company": "Schonfeld",
@@ -1192,6 +1282,12 @@
     "first_seen": "2026-07-08",
     "title": "Quantitative Trading Intern Summer 2027",
     "url": "https://job-boards.greenhouse.io/flowtraders/jobs/8047166"
+  },
+  "d3d90cdfd9c0e79f": {
+    "company": "Palantir",
+    "first_seen": "2026-10-31",
+    "title": "Software Engineer, New Grad - Defense",
+    "url": "https://jobs.lever.co/palantir/0a838e66-1ab0-4fc4-b4d3-4671c0352278"
   },
   "d3e0cfcd9c9c6de4": {
     "company": "Anduril",
@@ -1343,6 +1439,12 @@
     "title": "Summer 2027 - Trading Operations Engineer Intern",
     "url": "https://zapply.jobs/l/d/greenhouse-fiveringsllc-5420708008?s=gh-internships-2027"
   },
+  "eb838b37dafc3917": {
+    "company": "Palantir",
+    "first_seen": "2026-10-31",
+    "title": "Software Engineer, New Grad - Defense",
+    "url": "https://jobs.lever.co/palantir/18d901fc-93bb-4d18-9f04-c72031e20d79"
+  },
   "ec00570d5ebb43e0": {
     "company": "Schonfeld",
     "first_seen": "2026-09-05",
@@ -1390,6 +1492,12 @@
     "first_seen": "2026-08-19",
     "title": "Quant Trading Internship - Summer 2027",
     "url": "https://job-boards.greenhouse.io/chicagotradingcampus/jobs/4716930005"
+  },
+  "f3ed859dbc331117": {
+    "company": "Palantir",
+    "first_seen": "2026-10-31",
+    "title": "Forward Deployed Software Engineer, New Grad - Commercial",
+    "url": "https://jobs.lever.co/palantir/2e6b0ac8-83e9-4be5-a3aa-cf319f751728"
   },
   "f52dc260d5c6df6f": {
     "company": "DRW",
@@ -1445,10 +1553,22 @@
     "title": "Quantitative Developer Intern",
     "url": "https://tower-research.com/open-positions/?gh_jid=8044334"
   },
+  "fd4f1d89d494c516": {
+    "company": "Palantir",
+    "first_seen": "2026-10-31",
+    "title": "Forward Deployed Software Engineer, New Grad - Commercial",
+    "url": "https://jobs.lever.co/palantir/e500bcf3-19d8-4d3c-b340-4d76e4a55b40"
+  },
   "feff2dc309c52fff": {
     "company": "BP",
     "first_seen": "2026-08-31",
     "title": "Summer Internship – Supply, Trading,",
     "url": "https://bpinternational.wd3.myworkdayjobs.com/bpPrivateExternalCareersSite/job/United-States-of-America---Texas---Houston/Summer-Internship---Supply--Trading----Shipping-Finance---Risk---Houston--TX_RQ115372"
+  },
+  "ff1c9349e1232641": {
+    "company": "Palantir",
+    "first_seen": "2026-10-31",
+    "title": "Forward Deployed Software Engineer, New Grad - US Government",
+    "url": "https://jobs.lever.co/palantir/cbe90327-3e6e-451c-a54c-1d3cbcef5aeb"
   }
 }
